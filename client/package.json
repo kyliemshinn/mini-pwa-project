@@ -1,9 +1,9 @@
 {
   "name": "Contact",
   "scripts": {
-    "dev": "",
-    "build": "",
-    "start": ""
+    "dev": "webpack-dev-server",
+    "build": "webpack --mode production",
+    "start": "webpack --watch"
   },
   "author": "2U",
   "license": "UNLICENSED",

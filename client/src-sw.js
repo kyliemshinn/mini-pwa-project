@@ -1,11 +1,10 @@
 // TODO: Create a service worker that caches static assets:
 import { registerRoute } from 'workbox-routing';
-import { StaleWhileRevalidate, CacheFirst } from 'workbox-strategies';
+import { StaleWhileRevalidate} from 'workbox-strategies';
 import { precacheAndRoute } from 'workbox-precaching';
 import { CacheableResponsePlugin } from 'workbox-cacheable-response';
 
 // Import the expiration plugin
-import { ExpirationPlugin } from 'workbox-expiration';
 
 precacheAndRoute(self.__WB_MANIFEST);
 
@@ -16,7 +15,9 @@ const matchCallback = ({ request }) => {
     // CSS
     request.destination === 'style' ||
     // JavaScript
-    request.destination === 'script'
+    request.destination === 'script' ||
+    //worker
+    request.destination === 'worker'
   );
 };
 
@@ -32,14 +33,14 @@ registerRoute(
   })
 );
 
-// Register route for caching images
-// The cache first strategy is often the best choice for images because it saves bandwidth and improves performance.
+// Register route for caching data
 registerRoute(
-  ({ request }) => request.destination === 'image',
+  ({ request }) => request.destination === 'style', 'script', 'worker',
   new CacheFirst({
-    cacheName: 'my-image-cache',
+    cacheName: 'my-cache',
     plugins: [
       new CacheableResponsePlugin({
+          // up to 200 cached data
         statuses: [0, 200],
       }),
       new ExpirationPlugin({
